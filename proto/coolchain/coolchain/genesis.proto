@@ -1,0 +1,12 @@
+syntax = "proto3";
+package coolchain.coolchain;
+
+import "gogoproto/gogo.proto";
+import "coolchain/coolchain/params.proto";
+
+option go_package = "coolchain/x/coolchain/types";
+
+// GenesisState defines the coolchain module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+}

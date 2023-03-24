@@ -4,8 +4,10 @@ This container builds a minimal rollup chain using ignite with [Rollkit](https:/
 ## How to use:
 build:
 `docker build . -t rolltest`
+
 run with docker1.key
 `docker run -it -e KEYNAME=docker1 rolltest`
+
 run with docker2.key
 `docker run -it -e KEYNAME=docker2 rolltest`
 

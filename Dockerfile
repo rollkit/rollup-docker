@@ -3,9 +3,13 @@ FROM golang:1.20.2
 ENV IGNITE_VERSION=0.26.1
 # Install Ignite
 RUN curl -L https://get.ignite.com/cli@v${IGNITE_VERSION}! | bash
+COPY entrypoint.sh /
+RUN chmod +x /entrypoint.sh
 COPY coolchain coolchain
 COPY rollkit rollkit
 COPY cosmos-sdk cosmos-sdk
+COPY docker1.key /
+COPY docker2.key /
 WORKDIR cosmos-sdk
 RUN go mod edit -replace github.com/rollkit/rollkit=../rollkit
 RUN go mod tidy
@@ -19,4 +23,5 @@ RUN go mod tidy
 RUN go mod download
 RUN ignite chain build
 
-RUN /bin/bash
+WORKDIR /
+ENTRYPOINT ["/entrypoint.sh"]

@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  celestia-local:
+    image: ghcr.io/celestiaorg/local-celestia-devnet:main
+    ports:
+      - "26659:26659"
+    expose:
+      - "26657"
+        #rollup:
+        #  image: rolltest
+        #  ports:
+        #    - "26657"
+        #  environment:
+        #    KEYNAME: "docker1"

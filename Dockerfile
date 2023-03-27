@@ -1,5 +1,7 @@
 FROM golang:1.20.2
 
+RUN apt-get update
+RUN apt-get install jq -y
 ENV IGNITE_VERSION=0.26.1
 # Install Ignite
 RUN curl -L https://get.ignite.com/cli@v${IGNITE_VERSION}! | bash
@@ -22,6 +24,8 @@ RUN go mod edit -replace github.com/tendermint/tendermint=github.com/celestiaorg
 RUN go mod tidy
 RUN go mod download
 RUN ignite chain build
+
+COPY genesis.json /root/.coolchain/config/genesis.json
 
 WORKDIR /
 ENTRYPOINT ["/entrypoint.sh"]

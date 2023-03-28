@@ -26,6 +26,7 @@ RUN go mod download
 RUN ignite chain build
 
 COPY genesis.json /root/.coolchain/config/genesis.json
+EXPOSE 26657
 
 WORKDIR /
 ENTRYPOINT ["/entrypoint.sh"]

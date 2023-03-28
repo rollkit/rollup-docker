@@ -4,7 +4,8 @@ services:
     image: ghcr.io/celestiaorg/local-celestia-devnet:main
     ports:
       - "26659:26659"
-      - "26657:26657"
+    expose:
+      - "26657"
     # Rollup can't start until after DA starts.
     # This ensures it waits 5 seconds so the rollup can query it.
     healthcheck:
@@ -14,9 +15,12 @@ services:
       retries: 5
 
   rollup:
-    image: rolltest
     environment:
       KEYNAME: "docker1"
-        depends_on:
-          celestia-local:
-            condition: service_healthy
+    ports:
+      - "26657:26657"
+    depends_on:
+      celestia-local:
+        condition: service_healthy
+    build:
+      context: .

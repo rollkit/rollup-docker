@@ -5,9 +5,9 @@ services:
     # Rollup can't start until after DA starts.
     # This ensures it waits 5 seconds so the rollup can query it.
     expose:
-      - "26659"
+      - "26657"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:26657/block"]
+      test: ["CMD", "curl", "-f", "http://localhost:26657/block?height=1"]
       interval: 5s
       timeout: 10s
       retries: 5
@@ -21,7 +21,7 @@ services:
       - "36657:26657"
     environment:
       HOMEFLAG: "--home /root/.gm1 --rollkit.aggregator "
-      P2PFLAG: "--p2p.seeds 12D3KooWSqdiyfRSPqiogBpkNDeQrWSTYHm3qX7PARvj3Vs3qECU@192.167.10.4:26656"
+      #P2PFLAG: "--p2p.seeds 12D3KooWSqdiyfRSPqiogBpkNDeQrWSTYHm3qX7PARvj3Vs3qECU@192.167.10.4:26656"
     depends_on:
       celestia-local:
         condition: service_healthy

@@ -1,0 +1,57 @@
+version: "3.9"
+services:
+  celestia-local:
+    image: ghcr.io/celestiaorg/local-celestia-devnet:main
+    # Rollup can't start until after DA starts.
+    # This ensures it waits 5 seconds so the rollup can query it.
+    expose:
+      - "26659"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:26657/block"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+    networks:
+      localnet:
+        ipv4_address: 192.167.10.2
+  sequencer:
+    expose:
+      - "26656"
+    ports:
+      - "36657:26657"
+    environment:
+      HOMEFLAG: "--home /root/.gm1 --rollkit.aggregator "
+      P2PFLAG: "--p2p.seeds 12D3KooWSqdiyfRSPqiogBpkNDeQrWSTYHm3qX7PARvj3Vs3qECU@192.167.10.4:26656"
+    depends_on:
+      celestia-local:
+        condition: service_healthy
+    build:
+      context: .
+    networks:
+      localnet:
+        ipv4_address: 192.167.10.3
+  rollnode:
+    expose:
+      - "26656"
+    ports:
+      - "26657:26657"
+    environment:
+      HOMEFLAG: "--home /root/.gm2 "
+      P2PFLAG: "--p2p.seeds 12D3KooWAaf2nvRAhBZyNFzpeHtLAtwaV8vFsuUUewscbXchzBdK@192.167.10.3:26656"
+    depends_on:
+      celestia-local:
+        condition: service_healthy
+    build:
+      context: .
+    networks:
+      localnet:
+        ipv4_address: 192.167.10.4
+
+networks:
+  localnet:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      -
+        subnet: 192.167.10.0/16
